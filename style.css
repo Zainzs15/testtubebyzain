@@ -1,106 +1,211 @@
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #1a1a2e;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
+:root{
+  --bg:#1a1a2e;
+  --accent-start:#ff8a5c;
+  --accent-end:#ffd86b;
+  --accent-2a:#00c6ff;
+  --accent-2b:#0072ff;
+  --text-dark:#08120f;
+  --chip-z:1100;
 }
 
-h1 {
-    margin-bottom: 10px;
+/* Reset & base */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0}
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-y:auto; /* allow scrolling on small screens */
+  padding:18px;
 }
 
-#score-modal {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(90deg,#ff8a5c,#ffd86b);
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: bold;
-    color: #08120f;
-    box-shadow: 0 5px 15px rgba(255,140,80,0.3);
-    z-index: 1000;
+/* App container */
+.app-container{
+  max-width:1100px;
+  margin-inline:auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  align-items:stretch;
 }
 
-#level-container {
-    margin-bottom: 20px;
+/* Header row: score + level select.
+   score-chip is sticky top center but placed within header so it doesn't overlap.*/
+.header-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  position:relative;
+  padding-top:6px;
 }
 
-#game-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 20px;
+/* Score chip */
+.score-chip{
+  position:sticky;
+  top:10px;
+  align-self:flex-start;
+  background:linear-gradient(90deg,var(--accent-start),var(--accent-end));
+  color:var(--text-dark);
+  padding:8px 14px;
+  border-radius:20px;
+  font-weight:700;
+  box-shadow:0 6px 18px rgba(255,140,80,0.18);
+  z-index:var(--chip-z);
+  display:inline-block;
 }
 
-.tube {
-    width: 60px;
-    height: 200px;
-    border: 2px solid #fff;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.05);
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-start;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.2s;
+/* Level select row */
+.level-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-self:center;
+  margin-left:6px;
+}
+.level-label{font-weight:600}
+.level-select{
+  padding:6px 10px;
+  border-radius:8px;
+  border:none;
+  font-weight:700;
 }
 
-.tube:hover {
-    transform: scale(1.05);
+/* Game area */
+#game-area{display:flex;flex-direction:column;gap:12px;align-items:center}
+#game-container{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  justify-content:center;
+  align-items:flex-end;
+  width:100%;
+  padding:6px;
+  min-height:180px;
 }
 
-.liquid {
-    width: 100%;
-    height: 25%;
-    transition: all 0.6s ease;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    box-sizing: border-box;
+/* Tube */
+.tube{
+  width:64px;
+  height:210px;
+  border:2px solid #fff;
+  border-radius:12px;
+  background:rgba(255,255,255,0.04);
+  display:flex;
+  flex-direction:column-reverse;
+  justify-content:flex-start;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .18s ease, border .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.tube:focus{outline:3px solid rgba(255,200,120,0.18); outline-offset:3px}
+.tube:hover{transform:scale(1.04)}
+.liquid{
+  width:100%;
+  height:25%;
+  transition:all .18s ease;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  box-sizing:border-box;
 }
 
-.buttons {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
+/* Buttons group */
+.buttons{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  width:100%;
+  margin-top:6px;
+  flex-wrap:wrap;
+}
+button{
+  padding:10px 18px;
+  font-weight:700;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(90deg,var(--accent-start),var(--accent-end));
+  color:var(--text-dark);
+  box-shadow:0 6px 18px rgba(255,140,80,0.2);
+  transition:transform .18s, box-shadow .18s;
+  min-width:110px;
+}
+button:hover{transform:translateY(-3px);}
+
+/* Primary & ghost for modal */
+.btn-primary{
+  background:linear-gradient(90deg,var(--accent-2a),var(--accent-2b));
+  color:white;
+  min-width:140px;
+  box-shadow:0 8px 26px rgba(0,110,255,0.2);
+}
+.btn-primary:hover{transform:scale(1.04); box-shadow:0 14px 40px rgba(0,110,255,0.28)}
+.btn-ghost{
+  background:transparent;
+  color:white;
+  border:2px solid rgba(255,255,255,0.06);
+  min-width:100px;
 }
 
-button {
-    padding: 10px 20px;
-    font-weight: 700;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(90deg,#ff8a5c,#ffd86b);
-    color: #08120f;
-    box-shadow: 0 5px 15px rgba(255,140,80,0.3);
-    transition: all 0.3s;
+/* Modal */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+  padding:16px;
+}
+.modal-content{
+  background:#fff;
+  color:var(--text-dark);
+  padding:26px 28px;
+  border-radius:16px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.35);
+  text-align:center;
+  max-width:420px;
+  width:100%;
+  animation:popIn .32s ease;
+}
+.modal-actions{display:flex;gap:12px;justify-content:center;margin-top:16px}
+
+/* Confetti canvas */
+#confetti-canvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:1500;
 }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255,140,80,0.5);
+/* Responsiveness */
+@media (max-width:900px){
+  .tube{width:56px;height:185px}
+  button{min-width:98px}
+}
+@media (max-width:480px){
+  .score-chip{top:8px;padding:6px 10px;font-size:.92rem}
+  .tube{width:48px;height:150px;border-radius:10px}
+  .level-row{flex-wrap:wrap; gap:6px}
+  .buttons{flex-direction:column; align-items:center}
+  button{min-width:140px;width:92%}
 }
 
-#level-select {
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-weight: bold;
+/* small pop animation */
+@keyframes popIn{
+  from{transform:scale(.86);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.modal-actions.single {
+  display: flex;
+  justify-content: center;
 }
 
-#confetti-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+.modal-actions.single button {
+  width: 140px;
 }
